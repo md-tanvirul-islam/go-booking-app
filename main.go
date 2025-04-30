@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt" 
+	"strings"
+)
 
 func main() {
 
@@ -64,7 +67,18 @@ func main() {
 
 		fmt.Println("")
 
-		fmt.Printf("Booking:\n %v \n", bookingsSlice)
+		// fmt.Printf("Booking:\n %v \n", bookingsSlice)
+		fmt.Println("Booking:")
+
+		fName := ""
+		serial := 0
+
+		for index,booking := range bookingsSlice {
+			serial = index + 1
+			fName = strings.Fields(booking)[0]
+			
+			fmt.Printf("%v. %v\n", serial, fName)
+		}
 
 		fmt.Println("")
 		fmt.Println("**********************")
