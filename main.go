@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt" 
+	"fmt"
 	"strings"
 )
 
@@ -44,44 +44,61 @@ func main() {
 		fmt.Println("Enter number of tickets, you want:")
 		fmt.Scan(&userTickets)
 
-		remainingTickets = remainingTickets - userTickets
+		if userTickets > remainingTickets {
+			fmt.Println("")
+			fmt.Println("******* Warning **************")
+			fmt.Printf("We have %v tickets remaining. You can't book %v tickets\n", remainingTickets, userTickets)
+			fmt.Println("******* Warning **************")
+			fmt.Println("")
+		} else {
+			remainingTickets = remainingTickets - userTickets
 
-		fullName = firstName + " " + lastName
-		// bookings[0] = fullName
-		// bookingsSlice = append(bookingsSlice, fullName)
-		bookingsSlice = append(bookingsSlice, fullName)
+			fullName = firstName + " " + lastName
+			// bookings[0] = fullName
+			// bookingsSlice = append(bookingsSlice, fullName)
+			bookingsSlice = append(bookingsSlice, fullName)
 
-		fmt.Println("")
-		fmt.Println("**********************")
-		fmt.Println("")
+			fmt.Println("")
+			fmt.Println("******* Report **********")
+			fmt.Println("")
 
-		fmt.Printf("Thank you %v %v for booking %v tickets. You will get a confirmation email at %v.\n", firstName, lastName, userTickets, email)
+			fmt.Printf("Thank you %v %v for booking %v tickets. You will get a confirmation email at %v.\n", firstName, lastName, userTickets, email)
 
-		fmt.Println("")
+			fmt.Println("")
 
-		fmt.Printf("%v tickets remain out of %v\n", remainingTickets, conferenceTickets)
+			fmt.Printf("%v tickets remain out of %v\n", remainingTickets, conferenceTickets)
 
-		fmt.Println("")
+			fmt.Println("")
 
-		fmt.Printf("No of person make booking: %v \n", len(bookingsSlice))
+			fmt.Printf("No of person make booking: %v \n", len(bookingsSlice))
 
-		fmt.Println("")
+			fmt.Println("")
 
-		// fmt.Printf("Booking:\n %v \n", bookingsSlice)
-		fmt.Println("Booking:")
+			// fmt.Printf("Booking:\n %v \n", bookingsSlice)
+			fmt.Println("Booking:")
 
-		fName := ""
-		serial := 0
+			fName := ""
+			serial := 0
 
-		for index,booking := range bookingsSlice {
-			serial = index + 1
-			fName = strings.Fields(booking)[0]
-			
-			fmt.Printf("%v. %v\n", serial, fName)
+			for index, booking := range bookingsSlice {
+				serial = index + 1
+				fName = strings.Fields(booking)[0]
+
+				fmt.Printf("%v. %v\n", serial, fName)
+			}
+
+			fmt.Println("")
+			fmt.Println("******* Report **********")
+			fmt.Println("")
+
+			// var noTicketsRemaining bool = remainingTickets == 0
+			// noTicketsRemaining := remainingTickets == 0
+
+			if remainingTickets == 0 {
+				fmt.Println("Our conference is booked. Come back next year.")
+				break
+			}
 		}
 
-		fmt.Println("")
-		fmt.Println("**********************")
-		fmt.Println("")
 	}
 }
