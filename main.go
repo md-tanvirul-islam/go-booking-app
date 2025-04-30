@@ -24,7 +24,8 @@ func main() {
 	// fmt.Println(conferenceName);
 	// fmt.Println(&conferenceName);
 
-	for {
+	// for remainingTickets > 0 {
+	for{
 		var firstName string
 		var lastName string
 		var email string
@@ -50,6 +51,8 @@ func main() {
 			fmt.Printf("We have %v tickets remaining. You can't book %v tickets\n", remainingTickets, userTickets)
 			fmt.Println("******* Warning **************")
 			fmt.Println("")
+
+			// continue
 		} else {
 			remainingTickets = remainingTickets - userTickets
 
