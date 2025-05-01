@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"strconv"
+	// "strconv"
 	"strings"
 )
 
@@ -9,7 +11,7 @@ func main() {
 
 	conferenceName := "Go Conference"
 	const conferenceTickets int = 50
-	var remainingTickets uint = 50
+	var remainingTickets int = 50
 	// var bookings [50]string
 	// var bookingsSlice []string
 	// var bookingsSlice = []string{}
@@ -25,31 +27,65 @@ func main() {
 	// fmt.Println(&conferenceName);
 
 	// for remainingTickets > 0 {
-	for{
+	for {
 		var firstName string
 		var lastName string
 		var email string
-		var userTickets uint
+		var userTicketsInput string
 		var fullName string
+		var userTickets int
 
 		// ask user for their name
 		fmt.Println("Enter your First Name:")
 		fmt.Scan(&firstName)
 
+		if len(firstName) <= 2 {
+			fmt.Println("")
+			fmt.Println("******* Warning **************")
+			fmt.Println("First name is too short.")
+			fmt.Println("")
+			continue
+		}
+
 		fmt.Println("Enter your Last Name:")
 		fmt.Scan(&lastName)
+
+		if len(lastName) <= 2 {
+			fmt.Println("")
+			fmt.Println("******* Warning **************")
+			fmt.Println("Last name is too short.")
+			fmt.Println("")
+			continue
+		}
 
 		fmt.Println("Enter your Email:")
 		fmt.Scan(&email)
 
+		if !(strings.Contains(email, "@") && strings.Contains(email, ".")) {
+			fmt.Println("")
+			fmt.Println("******* Warning **************")
+			fmt.Println("Email is not valid.")
+			fmt.Println("")
+			continue
+		}
+
 		fmt.Println("Enter number of tickets, you want:")
-		fmt.Scan(&userTickets)
+		fmt.Scan(&userTicketsInput)
+
+		userTickets, userTicketsInputErr := strconv.Atoi(userTicketsInput)
+
+		if userTicketsInputErr != nil && userTickets < 1 {
+			fmt.Println("")
+			fmt.Println("******* Warning **************")
+			fmt.Println("Invalid ticket number.")
+			fmt.Println("")
+			continue
+		}
 
 		if userTickets > remainingTickets {
 			fmt.Println("")
 			fmt.Println("******* Warning **************")
 			fmt.Printf("We have %v tickets remaining. You can't book %v tickets\n", remainingTickets, userTickets)
-			fmt.Println("******* Warning **************")
 			fmt.Println("")
 
 			// continue
