@@ -3,30 +3,25 @@ package main
 import (
 	"fmt"
 	"strconv"
-	// "strconv"
 	"strings"
 )
+
+type User struct {
+	FirstName   string
+	LastName    string
+	Email       string
+	UserTickets int
+}
 
 func main() {
 
 	conferenceName := "Go Conference"
 	const conferenceTickets int = 50
 	var remainingTickets int = 50
-	// var bookings [50]string
-	// var bookingsSlice []string
-	// var bookingsSlice = []string{}
 	bookingsSlice := []string{}
 
-	fmt.Printf("conferenceName is %T, conferenceTickets is %T, remainingTickets is %T\n", conferenceName, conferenceTickets, remainingTickets)
+	greetUsers(conferenceName, conferenceTickets, remainingTickets)
 
-	fmt.Printf("Welcome to %v booking application\n", conferenceName)
-	fmt.Printf("We have total of %v tickets and %v are still available.\n", conferenceTickets, remainingTickets)
-	fmt.Println("Get your tickets here to attend")
-
-	// fmt.Println(conferenceName);
-	// fmt.Println(&conferenceName);
-
-	// for remainingTickets > 0 {
 	for {
 		var firstName string
 		var lastName string
@@ -35,103 +30,53 @@ func main() {
 		var fullName string
 		var userTickets int
 
-		// ask user for their name
 		fmt.Println("Enter your First Name:")
 		fmt.Scan(&firstName)
 
-		if len(firstName) <= 2 {
-			fmt.Println("")
-			fmt.Println("******* Warning **************")
-			fmt.Println("First name is too short.")
-			fmt.Println("")
+		if !isValidName(firstName, "First name") {
 			continue
 		}
 
 		fmt.Println("Enter your Last Name:")
 		fmt.Scan(&lastName)
 
-		if len(lastName) <= 2 {
-			fmt.Println("")
-			fmt.Println("******* Warning **************")
-			fmt.Println("Last name is too short.")
-			fmt.Println("")
+		if !isValidName(lastName, "Last name") {
 			continue
 		}
 
 		fmt.Println("Enter your Email:")
 		fmt.Scan(&email)
 
-		if !(strings.Contains(email, "@") && strings.Contains(email, ".")) {
-			fmt.Println("")
-			fmt.Println("******* Warning **************")
-			fmt.Println("Email is not valid.")
-			fmt.Println("")
+		if !isValidEmail(email) {
 			continue
 		}
 
 		fmt.Println("Enter number of tickets, you want:")
 		fmt.Scan(&userTicketsInput)
 
-		userTickets, userTicketsInputErr := strconv.Atoi(userTicketsInput)
-
-		if userTicketsInputErr != nil && userTickets < 1 {
-			fmt.Println("")
-			fmt.Println("******* Warning **************")
-			fmt.Println("Invalid ticket number.")
-			fmt.Println("")
+		if !isValidTicketNumber(userTicketsInput) {
 			continue
 		}
 
-		if userTickets > remainingTickets {
-			fmt.Println("")
-			fmt.Println("******* Warning **************")
-			fmt.Printf("We have %v tickets remaining. You can't book %v tickets\n", remainingTickets, userTickets)
-			fmt.Println("")
+		userTickets, _ = strconv.Atoi(userTicketsInput)
 
-			// continue
+		if userTickets > remainingTickets {
+			overTicketBookingWarning(remainingTickets, userTickets)
+
 		} else {
 			remainingTickets = remainingTickets - userTickets
 
 			fullName = firstName + " " + lastName
-			// bookings[0] = fullName
-			// bookingsSlice = append(bookingsSlice, fullName)
 			bookingsSlice = append(bookingsSlice, fullName)
 
-			fmt.Println("")
-			fmt.Println("******* Report **********")
-			fmt.Println("")
-
-			fmt.Printf("Thank you %v %v for booking %v tickets. You will get a confirmation email at %v.\n", firstName, lastName, userTickets, email)
-
-			fmt.Println("")
-
-			fmt.Printf("%v tickets remain out of %v\n", remainingTickets, conferenceTickets)
-
-			fmt.Println("")
-
-			fmt.Printf("No of person make booking: %v \n", len(bookingsSlice))
-
-			fmt.Println("")
-
-			// fmt.Printf("Booking:\n %v \n", bookingsSlice)
-			fmt.Println("Booking:")
-
-			fName := ""
-			serial := 0
-
-			for index, booking := range bookingsSlice {
-				serial = index + 1
-				fName = strings.Fields(booking)[0]
-
-				fmt.Printf("%v. %v\n", serial, fName)
+			user := User{
+				FirstName:   firstName,
+				LastName:    lastName,
+				Email:       email,
+				UserTickets: userTickets,
 			}
 
-			fmt.Println("")
-			fmt.Println("******* Report **********")
-			fmt.Println("")
-
-			// var noTicketsRemaining bool = remainingTickets == 0
-			// noTicketsRemaining := remainingTickets == 0
+			bookingReport(user, remainingTickets, conferenceTickets, bookingsSlice)
 
 			if remainingTickets == 0 {
 				fmt.Println("Our conference is booked. Come back next year.")
@@ -140,4 +85,95 @@ func main() {
 		}
 
 	}
+}
+
+func greetUsers(conferenceName string, conferenceTickets int, remainingTickets int) {
+	fmt.Printf("conferenceName is %T, conferenceTickets is %T, remainingTickets is %T\n", conferenceName, conferenceTickets, remainingTickets)
+	fmt.Printf("Welcome to %v booking application\n", conferenceName)
+	fmt.Printf("We have total of %v tickets and %v are still available.\n", conferenceTickets, remainingTickets)
+	fmt.Println("Get your tickets here to attend")
+}
+
+func bookingReport(user User, remainingTickets int, conferenceTickets int, bookings []string) {
+	fmt.Println("")
+	fmt.Println("******* Report **********")
+	fmt.Println("")
+
+	fmt.Printf("Thank you %v %v for booking %v tickets. You will get a confirmation email at %v.\n", user.FirstName, user.LastName, user.UserTickets, user.Email)
+
+	fmt.Println("")
+
+	fmt.Printf("%v tickets remain out of %v\n", remainingTickets, conferenceTickets)
+
+	fmt.Println("")
+
+	fmt.Printf("No of person make booking: %v \n", len(bookings))
+
+	fmt.Println("")
+
+	// fmt.Printf("Booking:\n %v \n", bookingsSlice)
+	fmt.Println("Booking:")
+
+	fName := ""
+	serial := 0
+
+	for index, booking := range bookings {
+		serial = index + 1
+		fName = strings.Fields(booking)[0]
+
+		fmt.Printf("%v. %v\n", serial, fName)
+	}
+
+	fmt.Println("")
+	fmt.Println("******* Report **********")
+	fmt.Println("")
+}
+
+func isValidEmail(email string) bool {
+	var valid bool = true
+
+	if !(strings.Contains(email, "@") && strings.Contains(email, ".")) {
+		fmt.Println("")
+		fmt.Println("******* Warning **************")
+		fmt.Println("Email is not valid.")
+		fmt.Println("")
+		valid = false
+	}
+
+	return valid
+}
+
+func isValidName(lastName string, fieldName string) bool {
+	var valid bool = true
+
+	if len(lastName) <= 2 {
+		fmt.Println("")
+		fmt.Println("******* Warning **************")
+		fmt.Printf("%v is too short.\n", fieldName)
+		fmt.Println("")
+		valid = false
+	}
+	return valid
+}
+
+func isValidTicketNumber(userTicketsInput string) bool {
+	var valid bool = true
+
+	userTickets, userTicketsInputErr := strconv.Atoi(userTicketsInput)
+
+	if userTicketsInputErr != nil && userTickets < 1 {
+		fmt.Println("")
+		fmt.Println("******* Warning **************")
+		fmt.Println("Invalid ticket number.")
+		fmt.Println("")
+		valid = false
+	}
+	return valid
+}
+
+func overTicketBookingWarning(remainingTickets int, userTickets int) {
+	fmt.Println("")
+	fmt.Println("******* Warning **************")
+	fmt.Printf("We have %v tickets remaining. You can't book %v tickets\n", remainingTickets, userTickets)
+	fmt.Println("")
 }
