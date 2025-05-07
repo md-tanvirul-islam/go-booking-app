@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"strconv"
+	"time"
+
 	// "strings"
 	"booking-app/helper"
 )
@@ -68,7 +70,7 @@ func main() {
 
 		} else {
 			remainingTickets = remainingTickets - userTickets
-			
+
 			/* Using Slice */
 			// fullName = firstName + " " + lastName
 			// bookingsSlice = append(bookingsSlice, fullName)
@@ -93,6 +95,7 @@ func main() {
 
 			bookingsStruct = append(bookingsStruct, user)
 			bookingReport(user, remainingTickets, conferenceTickets, bookingsStruct)
+			go emailBooking(user.FirstName, user.Email)
 
 			if remainingTickets == 0 {
 				fmt.Println("Our conference is booked. Come back next year.")
@@ -141,7 +144,7 @@ func bookingReport(user User, remainingTickets int, conferenceTickets int, booki
 		/* Using Slice */
 		// fName = strings.Fields(booking)[0]
 		// fmt.Printf("%v. %v\n", serial, fName)
-		
+
 		/* Using Map */
 		// fmt.Printf("%v. %v\n", serial, booking["firstName"])
 
@@ -150,7 +153,7 @@ func bookingReport(user User, remainingTickets int, conferenceTickets int, booki
 	}
 
 	fmt.Println("")
-	fmt.Println("******* Report **********")
+	fmt.Println("*************************")
 	fmt.Println("")
 }
 
@@ -158,5 +161,14 @@ func overTicketBookingWarning(remainingTickets int, userTickets int) {
 	fmt.Println("")
 	fmt.Println("******* Warning **************")
 	fmt.Printf("We have %v tickets remaining. You can't book %v tickets\n", remainingTickets, userTickets)
-	fmt.Println("")
+	fmt.Println("******************************")
+}
+
+func emailBooking(firstName string, email string) {
+	time.Sleep(30 * time.Second)
+
+	body := fmt.Sprintf("Hi, %v You have successfully booked the ticket for the Conference.\n", firstName)
+	fmt.Println("******* Emailing **************")
+	fmt.Printf("Address: %v \nBody: %v\n", email, body)
+	fmt.Println("*******************************")
 }
