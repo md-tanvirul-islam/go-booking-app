@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strconv"
 	"time"
-
 	// "strings"
 	"booking-app/helper"
+	"sync"
 )
 
 type User struct {
@@ -15,6 +15,8 @@ type User struct {
 	Email       string
 	UserTickets int
 }
+
+var wg = sync.WaitGroup{}
 
 func main() {
 
@@ -95,6 +97,8 @@ func main() {
 
 			bookingsStruct = append(bookingsStruct, user)
 			bookingReport(user, remainingTickets, conferenceTickets, bookingsStruct)
+
+			wg.Add(1)
 			go emailBooking(user.FirstName, user.Email)
 
 			if remainingTickets == 0 {
@@ -104,6 +108,8 @@ func main() {
 		}
 
 	}
+
+	wg.Wait()
 }
 
 func greetUsers(conferenceName string, conferenceTickets int, remainingTickets int) {
@@ -171,4 +177,6 @@ func emailBooking(firstName string, email string) {
 	fmt.Println("******* Emailing **************")
 	fmt.Printf("Address: %v \nBody: %v\n", email, body)
 	fmt.Println("*******************************")
+
+	wg.Done()
 }
