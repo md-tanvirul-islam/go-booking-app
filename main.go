@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"booking-app/helper"
 )
 
 type User struct {
@@ -33,28 +34,28 @@ func main() {
 		fmt.Println("Enter your First Name:")
 		fmt.Scan(&firstName)
 
-		if !isValidName(firstName, "First name") {
+		if !helper.IsValidName(firstName, "First name") {
 			continue
 		}
 
 		fmt.Println("Enter your Last Name:")
 		fmt.Scan(&lastName)
 
-		if !isValidName(lastName, "Last name") {
+		if !helper.IsValidName(lastName, "Last name") {
 			continue
 		}
 
 		fmt.Println("Enter your Email:")
 		fmt.Scan(&email)
 
-		if !isValidEmail(email) {
+		if !helper.IsValidEmail(email) {
 			continue
 		}
 
 		fmt.Println("Enter number of tickets, you want:")
 		fmt.Scan(&userTicketsInput)
 
-		if !isValidTicketNumber(userTicketsInput) {
+		if !helper.IsValidTicketNumber(userTicketsInput) {
 			continue
 		}
 
@@ -127,48 +128,6 @@ func bookingReport(user User, remainingTickets int, conferenceTickets int, booki
 	fmt.Println("")
 	fmt.Println("******* Report **********")
 	fmt.Println("")
-}
-
-func isValidEmail(email string) bool {
-	var valid bool = true
-
-	if !(strings.Contains(email, "@") && strings.Contains(email, ".")) {
-		fmt.Println("")
-		fmt.Println("******* Warning **************")
-		fmt.Println("Email is not valid.")
-		fmt.Println("")
-		valid = false
-	}
-
-	return valid
-}
-
-func isValidName(lastName string, fieldName string) bool {
-	var valid bool = true
-
-	if len(lastName) <= 2 {
-		fmt.Println("")
-		fmt.Println("******* Warning **************")
-		fmt.Printf("%v is too short.\n", fieldName)
-		fmt.Println("")
-		valid = false
-	}
-	return valid
-}
-
-func isValidTicketNumber(userTicketsInput string) bool {
-	var valid bool = true
-
-	userTickets, userTicketsInputErr := strconv.Atoi(userTicketsInput)
-
-	if userTicketsInputErr != nil && userTickets < 1 {
-		fmt.Println("")
-		fmt.Println("******* Warning **************")
-		fmt.Println("Invalid ticket number.")
-		fmt.Println("")
-		valid = false
-	}
-	return valid
 }
 
 func overTicketBookingWarning(remainingTickets int, userTickets int) {
