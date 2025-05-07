@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"strconv"
-	"strings"
+	// "strings"
 	"booking-app/helper"
 )
 
@@ -19,7 +19,9 @@ func main() {
 	conferenceName := "Go Conference"
 	const conferenceTickets int = 50
 	var remainingTickets int = 50
-	bookingsSlice := []string{}
+	// bookingsSlice := []string{}
+	// bookingsMap := make([]map[string]string, 0)
+	bookingsStruct := make([]User, 0)
 
 	greetUsers(conferenceName, conferenceTickets, remainingTickets)
 
@@ -28,7 +30,7 @@ func main() {
 		var lastName string
 		var email string
 		var userTicketsInput string
-		var fullName string
+		// var fullName string
 		var userTickets int
 
 		fmt.Println("Enter your First Name:")
@@ -66,10 +68,22 @@ func main() {
 
 		} else {
 			remainingTickets = remainingTickets - userTickets
+			
+			/* Using Slice */
+			// fullName = firstName + " " + lastName
+			// bookingsSlice = append(bookingsSlice, fullName)
+			// bookingReport(user, remainingTickets, conferenceTickets, bookingsSlice)
 
-			fullName = firstName + " " + lastName
-			bookingsSlice = append(bookingsSlice, fullName)
+			/* Using Map */
+			// var userMap = make(map[string]string)
+			// userMap["firstName"] = firstName
+			// userMap["lastName"] = lastName
+			// userMap["email"] = email
+			// userMap["userTickets"] = strconv.FormatInt(int64(userTickets), 10)
+			// bookingsMap = append(bookingsMap, userMap)
+			// bookingReport(user, remainingTickets, conferenceTickets, bookingsMap)
 
+			/* Using Struct */
 			user := User{
 				FirstName:   firstName,
 				LastName:    lastName,
@@ -77,7 +91,8 @@ func main() {
 				UserTickets: userTickets,
 			}
 
-			bookingReport(user, remainingTickets, conferenceTickets, bookingsSlice)
+			bookingsStruct = append(bookingsStruct, user)
+			bookingReport(user, remainingTickets, conferenceTickets, bookingsStruct)
 
 			if remainingTickets == 0 {
 				fmt.Println("Our conference is booked. Come back next year.")
@@ -95,7 +110,9 @@ func greetUsers(conferenceName string, conferenceTickets int, remainingTickets i
 	fmt.Println("Get your tickets here to attend")
 }
 
-func bookingReport(user User, remainingTickets int, conferenceTickets int, bookings []string) {
+// func bookingReport(user User, remainingTickets int, conferenceTickets int, bookings []string) { // using slices
+// func bookingReport(user User, remainingTickets int, conferenceTickets int, bookings []map[string]string) { // using list of map
+func bookingReport(user User, remainingTickets int, conferenceTickets int, bookings []User) { // using list of struct
 	fmt.Println("")
 	fmt.Println("******* Report **********")
 	fmt.Println("")
@@ -115,14 +132,21 @@ func bookingReport(user User, remainingTickets int, conferenceTickets int, booki
 	// fmt.Printf("Booking:\n %v \n", bookingsSlice)
 	fmt.Println("Booking:")
 
-	fName := ""
+	// fName := ""
 	serial := 0
 
 	for index, booking := range bookings {
 		serial = index + 1
-		fName = strings.Fields(booking)[0]
 
-		fmt.Printf("%v. %v\n", serial, fName)
+		/* Using Slice */
+		// fName = strings.Fields(booking)[0]
+		// fmt.Printf("%v. %v\n", serial, fName)
+		
+		/* Using Map */
+		// fmt.Printf("%v. %v\n", serial, booking["firstName"])
+
+		/* Using Struct */
+		fmt.Printf("%v. %v\n", serial, booking.FirstName)
 	}
 
 	fmt.Println("")
